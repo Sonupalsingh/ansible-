@@ -1,0 +1,28 @@
+---
+- name: Install Zoom and Visual Studio Code on Windows
+  hosts: windows
+  tasks:
+    - name: Ensure C:\Temp directory exists
+      ansible.windows.win_file:
+        path: C:\Temp
+        state: directory
+
+    - name: Download Zoom installer
+      ansible.windows.win_get_url:
+        url: https://zoom.us/client/latest/ZoomInstaller.exe
+        dest: C:\Temp\ZoomInstaller.exe
+
+    - name: Install Zoom
+      ansible.windows.win_command:
+        cmd: C:\Temp\ZoomInstaller.exe /quiet
+        creates: C:\Users\Administrator\AppData\Roaming\Zoom\bin\Zoom.exe
+
+    - name: Download Visual Studio Code installer
+      ansible.windows.win_get_url:
+        url: https://update.code.visualstudio.com/latest/win32-x64-user/stable
+        dest: C:\Temp\VSCodeInstaller.exe
+
+    - name: Install Visual Studio Code
+      ansible.windows.win_command:
+        cmd: C:\Temp\VSCodeInstaller.exe /silent
+        creates: C:\Program Files\Microsoft VS Code\Code.exe
